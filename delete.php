@@ -12,12 +12,13 @@ if($_GET){
   $dbHandle = new mysqli($server, $user, $password, $db);
   $id = $_GET['id'];
   $id = $dbHandle->real_escape_string($id);
-  $update = " UPDATE inventory SET deleted =
-  CASE
-    WHEN deleted = 'y' AND id = '$id' THEN 'n'
-    WHEN deleted = 'n' AND id = '$id' THEN 'y'
-    ELSE deleted
-  END;";
+//  $update = " UPDATE inventory SET deleted =
+//  CASE
+//    WHEN deleted = 'y' AND id = '$id' THEN 'n'
+//    WHEN deleted = 'n' AND id = '$id' THEN 'y'
+//    ELSE deleted
+//  END;";
+  $update = " DELETE FROM inventory WHERE id = '$id';";
   mysqli_query($dbHandle, $update) or die("Failed");
   } else {
   mysqli_close($dbHandle);

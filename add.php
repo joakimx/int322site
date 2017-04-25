@@ -90,7 +90,7 @@ require("a1.lib");
    	table {
 	  	border-collapse: collapse;
 	  	margin: auto;
-	  	border-color: red;
+	  	border-color: gray;
    	}
 
    	table, td, th {
@@ -104,7 +104,7 @@ require("a1.lib");
 
    	td {
 	  	background-color: #F9BE4C;
-	  	border-color: #ff0000 #0000ff;
+	  	border-color: #3c3c3d;
 	  	border-width: 3px;
   	}
 
@@ -127,7 +127,8 @@ require("a1.lib");
 	</header>
 		<ul id="link">
 			<li><a href="add.php">Add</a></li>
-			<li><a href="view.php" target="_self">View All</a></li>
+			<li><a href="view.php" target="_self">Catalogue</a></li>
+			<li><a href="cart.php" target="frame">View Cart</a></li>
 		</ul>
 
 <?php

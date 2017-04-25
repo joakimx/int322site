@@ -119,7 +119,8 @@ require("a1.lib");
 <!-- Start of menu/link -->
 		<ul id="link">
 			<li><a href="add.php">Add</a></li>
-			<li><a href="view.php" target="frame">View All</a></li>
+			<li><a href="view.php" target="frame">Catalogue</a></li>
+			<li><a href="cart.php" target="frame">View Cart</a></li>
 		</ul>
 <!-- Show all entries from the database when page is called from add.php -->
     <?php 
