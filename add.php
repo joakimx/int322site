@@ -297,7 +297,7 @@ require("a1.lib");
   </tr>
    </table>
   </form>
-
+<!--
 <?php
 //If all data is valid and was input into database, show updated records. 
 if ($_POST && $valid) {
@@ -307,6 +307,7 @@ if ($_POST && $valid) {
  	header("Location: view.php");
 }
  ?>
+-->
 
 <!-- Start of footer, end of add.php -->
 	<footer>
