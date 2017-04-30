@@ -13,6 +13,7 @@ $valid = false;
   <!-- Form error handling -->
 
   <?php
+  //Initial error variables set to null string
   $errItem = "";
   $errDesc = "";
   $errSupplier = "";
@@ -22,10 +23,20 @@ $valid = false;
   $errReorder = "";
   $errBackOrder= "";
 
+  //Variables for regex checking
+  $item = '/^[ ]*[A-Za-z0-9,\s\;\:\-\'\"]*[ ]*$/i';
+  $desc = '/^[a-z0-9\.\,\'\.\s\\n\-]+$/i';
+  $supplier = '/^[ ]*[A-Za-z0-9\.\' ]+[ ]*$/i';
+  $cost = '/^[ ]*[0-9]+\.[0-9]{2}[ ]*$/i';
+  $price = '/^[ ]*[0-9]+\.[0-9]{2}[ ]*$/i';
+  $onhand = '/^[ ]*[0-9]+[ ]*$/';
+  $reorder = '/^[ ]*[0-9]+[ ]*$/';
+  $backorder1 = '';
+
   if ($_SERVER["REQUEST_METHOD"] == 'POST')
   {
 
-    if (empty($_POST['item'])){
+    if (empty($_POST['item']) || !(preg_match($item, $_POST['item']))){
       $errItem = "Please enter item name" ;
       $valid = false;
     } else {
@@ -33,7 +44,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['desc'])){
+    if (empty($_POST['desc']) || !(preg_match($item, $_POST['desc']))){
       $errDesc = "Please enter item description" ;
       $valid = false;
     } else {
@@ -41,7 +52,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['supplier'])){
+    if (empty($_POST['supplier']) || !(preg_match($item, $_POST['supplier']))){
       $errSupplier = "Please enter item supplier" ;
       $valid = false;
     } else {
@@ -49,7 +60,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['cost'])){
+    if (empty($_POST['cost']) || !(preg_match($item, $_POST['cost']))){
       $errCost = "Please enter item cost" ;
       $valid = false;
     } else {
@@ -57,7 +68,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['price'])){
+    if (empty($_POST['price']) || !(preg_match($item, $_POST['price']))){
       $errPrice = "Please enter item price" ;
       $valid = false;
     } else {
@@ -65,7 +76,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['onhand'])){
+    if (empty($_POST['onhand']) || !(preg_match($item, $_POST['onhand']))){
       $errOnhand = "Please enter items on hand" ;
       $valid = false;
     } else {
@@ -73,7 +84,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['reorder'])){
+    if (empty($_POST['reorder']) || !(preg_match($item, $_POST['reorder']))){
       $errReorder = "Please enter item reorder point" ;
       $valid = false;
     } else {
@@ -81,7 +92,7 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['backorder'])){
+    if (empty($_POST['backorder']) || !(preg_match($item, $_POST['backorder']))){
       $errBackOrder = "Please enter item backorder" ;
       $valid = false;
     } else {
