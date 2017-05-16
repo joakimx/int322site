@@ -8,7 +8,8 @@ class CRUD{
     return $dbb;
   }
 
-  public function create($item, $desc, $supplier, $cost, $price, $onhand, $reorder, $backorder, $deleted)
+//  public function create($item, $desc, $supplier, $cost, $price, $onhand, $reorder, $backorder, $deleted)
+  public function create($sql)
   {
 
     if ($db = $this->__construct()) {
@@ -17,8 +18,9 @@ class CRUD{
       echo "Not successful!\n";
     }
 
-    $db->query("INSERT INTO inventory (itemName, description, supplierCode, Cost, price, onHand, reorderPoint, backOrder, deleted)
-    VALUES ('$item', '$desc', '$supplier', '$cost', '$price', '$onhand', '$reorder', '$backorder', '$deleted');");
+//    $db->query("INSERT INTO inventory (itemName, description, supplierCode, Cost, price, onHand, reorderPoint, backOrder, deleted)
+//    VALUES ('$item', '$desc', '$supplier', '$cost', '$price', '$onhand', '$reorder', '$backorder', '$deleted');");
+    $db->query($sql);
     $db->close();
   }
 
@@ -31,40 +33,30 @@ class CRUD{
 
     $qresult = $db->query("SELECT * FROM inventory;");
 
-    echo "<table border='1'>
+    echo "<table border='1' style='width:80%'>
             <tr>
-            <th>ID</th>
-            <th>Item Name</th>
+            <th>Title</th>
             <th>Description</th>
-            <th>Supplier</th>
-            <th>Cost</th>
-            <th>Price $</th>
-            <th>On Hand</th>
-            <th>Reorder Level</th>
-            <th>On Backorder?</th>
-            <th>Delete/Restore Flag</th>
+            <th>Price</th>
+            <th>Cover</th>
             <th>Delete/Restore?</th>
+	          <th>Cart it</th>
             </tr>";
 
     while($row = mysqli_fetch_array($qresult))
     {
             echo "<tr>";
-            echo "<td>" . $row['id'] . "</td>";
-            echo "<td>" . $row['itemName'] . "</td>";
+            echo "<td>" . $row['title'] . "</td>";
             echo "<td>" . $row['description'] . "</td>";
-            echo "<td>" . $row['supplierCode'] . "</td>";
-            echo "<td>" . $row['cost'] . "</td>";
             echo "<td>" . $row['price'] . "</td>";
-            echo "<td>" . $row['onHand'] . "</td>";
-            echo "<td>" . $row['reorderPoint'] . "</td>";
-        	  echo "<td>" . $row['backOrder'] . "</td>";
-        	  echo "<td>" . $row['deleted'] . "</td>";
             echo '<td><a href="index.php?id=' . $row['id'] . '">Delete</a></td>';
+            echo '<td><img src ="' . $row['image'] . '" height=\'250\' width=\'175\'></td>';
+	    echo '<td><input name=\'checkbox[]\' type=\'checkbox\' value="' . $row['id'] . '"> </td>';
             echo "</tr>";
-    }
-    echo "</table>";
-    $db->close();
   }
+  echo "</table>";
+	print_r(array_values($chekbox));
+}
 
   public function delete($id)
   {
@@ -93,9 +85,23 @@ class CRUD{
 
   }
 
+public function iquery($sql)
+{
+
+  if ($db = $this->__construct()) {
+    echo "Successful\n";
+  } else {
+    echo "Not successful!\n";
+  }
+
+//    $db->query("INSERT INTO inventory (itemName, description, supplierCode, Cost, price, onHand, reorderPoint, backOrder, deleted)
+//    VALUES ('$item', '$desc', '$supplier', '$cost', '$price', '$onhand', '$reorder', '$backorder', '$deleted');");
+  $result = $db->query($sql);
+  $db->close();
+  return $result;
+}
+
 }
 
 $CRUD = new CRUD();
-$CRUD->__construct();
-$CRUD->create();
 ?>

@@ -5,7 +5,7 @@ if($_POST && $valid) {
  	header("Location: view.php");
 }
 //library for common codes. 
-require("a1.lib");
+require("a1.php");
 ?>
 <!DOCTYPE html>
 <head>

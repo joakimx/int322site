@@ -14,61 +14,39 @@ $valid = false;
 
   <?php
   //Initial error variables set to null string
-  $errItem = "";
-  $errDesc = "";
-  $errSupplier = "";
-  $errCost = "";
+  $errTitle = "";
+  $errDescription = "";
   $errPrice = "";
-  $errOnhand = "";
-  $errReorder = "";
-  $errBackOrder= "";
+  $errImage= "";
 
   //Variables for regex checking
-  $item = '/^[ ]*[A-Za-z0-9,\s\;\:\-\'\"]*[ ]*$/i';
-  $desc = '/^[a-z0-9\.\,\'\.\s\\n\-]+$/i';
-  $supplier = '/^[ ]*[A-Za-z0-9\.\' ]+[ ]*$/i';
-  $cost = '/^[ ]*[0-9]+\.[0-9]{2}[ ]*$/i';
-  $price = '/^[ ]*[0-9]+\.[0-9]{2}[ ]*$/i';
-  $onhand = '/^[ ]*[0-9]+[ ]*$/';
-  $reorder = '/^[ ]*[0-9]+[ ]*$/';
-  $backorder1 = '';
+  $title = '/^[ ]*[A-Za-z0-9,\s\;\:\-\'\"]*[ ]*$/i';
+  $description = '/^[a-z0-9\.\,\'\.\s\\n\-]+$/i';
+  $price = '/^[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{2})?$/';
+  //$image = '/(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/';
+  $image = "";
 
   if ($_SERVER["REQUEST_METHOD"] == 'POST')
   {
 
-    if (empty($_POST['item']) || !(preg_match($item, $_POST['item']))){
-      $errItem = "Please enter item name" ;
+    if (empty($_POST['title']) || !(preg_match($title, $_POST['title']))){
+      $errTitle = "Please enter item title" ;
       $valid = false;
     } else {
-      $errItem = "";
+      $errTItle = "";
       $valid = true;
     }
 
-    if (empty($_POST['desc']) || !(preg_match($item, $_POST['desc']))){
-      $errDesc = "Please enter item description" ;
+    if (empty($_POST['description']) || !(preg_match($description, $_POST['description']))){
+      $errDescription = "Please enter item description" ;
       $valid = false;
     } else {
-      $errDesc = "";
+      $errDescription = "";
       $valid = true;
     }
 
-    if (empty($_POST['supplier']) || !(preg_match($item, $_POST['supplier']))){
-      $errSupplier = "Please enter item supplier" ;
-      $valid = false;
-    } else {
-      $errSupplier = "";
-      $valid = true;
-    }
 
-    if (empty($_POST['cost']) || !(preg_match($item, $_POST['cost']))){
-      $errCost = "Please enter item cost" ;
-      $valid = false;
-    } else {
-      $errCost = "";
-      $valid = true;
-    }
-
-    if (empty($_POST['price']) || !(preg_match($item, $_POST['price']))){
+    if (empty($_POST['price']) || !(preg_match($price, $_POST['price']))){
       $errPrice = "Please enter item price" ;
       $valid = false;
     } else {
@@ -76,81 +54,54 @@ $valid = false;
       $valid = true;
     }
 
-    if (empty($_POST['onhand']) || !(preg_match($item, $_POST['onhand']))){
-      $errOnhand = "Please enter items on hand" ;
-      $valid = false;
-    } else {
-      $errOnhand = "";
+    if (empty($_POST['image']) || !(preg_match($image, $_POST['image']))){
+      $errImage = "Please enter image link" ;
       $valid = true;
-    }
-
-    if (empty($_POST['reorder']) || !(preg_match($item, $_POST['reorder']))){
-      $errReorder = "Please enter item reorder point" ;
-      $valid = false;
     } else {
-      $errReorder = "";
-      $valid = true;
-    }
-
-    if (empty($_POST['backorder']) || !(preg_match($item, $_POST['backorder']))){
-      $errBackOrder = "Please enter item backorder" ;
-      $valid = false;
-    } else {
-      $errBackOrder = "";
+      $errImage = "";
       $valid = true;
     }
 
     if($valid) {
-      $CRUD->__construct();
-      $CRUD->create($_POST['item'], $_POST['desc'], $_POST['supplier'], $_POST['cost'], $_POST['price'], $_POST['onhand'], $_POST['reorder'], $_POST['backorder'], "n" );
+      $db = $CRUD->__construct();
+	$title = $title = $db->real_escape_string($_POST['title']);
+	$description = $description = $db->real_escape_string($_POST['description']);
+	$price = $price = $db->real_escape_string($_POST['price']);
+	$image = $image = $db->real_escape_string($_POST['image']);
+	$sql = "INSERT INTO inventory (title, description, price, image) VALUES ('$title', '$description', '$price', '$image');";
+	$CRUD->create($sql);
 
+/*      $CRUD->create($_POST['title'], $_POST['description'], $_POST['price'], $_POST['image']);
+	$sql = "INSERT INTO inventory (title, description, price, image) VALUES ('$_POST['title']', '$_POST['description']', '$_POST['price']', '$_POST['image']')";
+*/
     }
 
   }
   ?>
 
-  <!-- Start of form..generate errors/populate fields if fields are not valid, else- display empty form -->
   <form action="" method="POST">
 	<br>
     <table>
     <tr>
-      <td>Item name:</td>
-      <td><input name="item" type="text"  value="<?php if(isset($_POST['item']) && !$valid) { echo $_POST['item']; } elseif(isset($_POST['item']) && $valid) {echo "";} ?>" >
-        <?php echo '<span style="color:red">' . $errItem . '</span>'; ?></td>
+      <td>Item Title:</td>
+      <td><input name="title" type="text"  value="<?php if(isset($_POST['title']) && !$valid) { echo $_POST['title']; } elseif(isset($_POST['title']) && $valid) {echo "";} ?>" >
+        <?php echo '<span style="color:red">' . $errTitle . '</span>'; ?></td>
     </tr>
     <tr>
-      <td>Description: </td>
-      <td><textarea name="desc" type="text" cols="19" rows="0" value="<?php if(isset($_POST['desc']) && !$valid) { echo htmlspecialchars($_POST['desc']);} elseif(isset($_POST['desc']) && $valid) {echo "";} ?>">
+      <td>Item Description: </td>
+      <td><textarea name="description" type="text" cols="19" rows="0" value="<?php if(isset($_POST['description']) && !$valid) { echo htmlspecialchars($_POST['description']);} elseif(isset($_POST['description']) && $valid) {echo "";} ?>">
 	  </textarea>
-        <?php echo '<span style="color:red">' . $errDesc . '</span>'; ?> </td>
+        <?php echo '<span style="color:red">' . $errDescription . '</span>'; ?> </td>
     </tr>
     <tr>
-      <td>Supplier code:</td>
-      <td><input name="supplier" type="text" value="<?php if(isset($_POST['supplier']) && !$valid) { echo $_POST['supplier']; } elseif(isset($_POST['supplier']) && $valid) {echo "";}?>">
-        <?php echo '<span style="color:red">' . $errSupplier . '</span>'; ?> </td>
+      <td>Item Price:</td>
+      <td><input name="price" type="text" value="<?php if(isset($_POST['price']) && !$valid) { echo $_POST['price']; } elseif(isset($_POST['price']) && $valid) {echo "";}?>">
+        <?php echo '<span style="color:red">' . $errPrice . '</span>'; ?> </td>
     </tr>
     <tr>
-      <td>Cost: </td>
-      <td><input name="cost" type="text" value="<?php if(isset($_POST['cost']) && !$valid) { echo $_POST['cost']; } elseif(isset($_POST['cost']) && $valid) {echo "";} ?>">
-      <?php echo '<span style="color:red">' . $errCost . '</span>'; ?></td>
-    </tr>
-    <tr>
-    <td>Selling price: </td>
-      <td><input name="price" type="text" value="<?php if(isset($_POST['price']) && !$valid) { echo $_POST['price'];}  elseif(isset($_POST['price']) && $valid) {echo "";} ?>">
-      <?php echo '<span style="color:red">' . $errPrice . '</span>'; ?></td>
-    </tr>
-	    <tr>
-      <td>Number on hand: </td>
-      <td><input name="onhand" type="text" value="<?php if(isset($_POST['onhand']) && !$valid) { echo $_POST['onhand'];} elseif(isset($_POST['onhand']) && $valid) {echo "";} ?>">
-      <?php echo '<span style="color:red">' . $errOnhand . '</span>'; ?></td>
-    </tr>
-    <td>Reorder Point: </td>
-      <td><input name="reorder" type="text" value="<?php if(isset($_POST['reorder']) && !$valid) { echo $_POST['reorder'];} elseif(isset($_POST['reorder']) && $valid) {echo "";} ?>">
-      <?php echo '<span style="color:red">' . $errReorder . '</span>'; ?></td>
-    </tr>
-    <td>Back Order Point: </td>
-      <td><input name="backorder" type="text" value="<?php if(isset($_POST['backorder']) && !$valid ) { echo $_POST['backorder'];} elseif(isset($_POST['backorder']) && $valid) {echo "";} ?>">
-      <?php echo '<span style="color:red">' . $errBackOrder . '</span>'; ?></td>
+    <td>Front Cover:</td>
+      <td><input name="image" type="text" value="<?php if(isset($_POST['image']) && !$valid) { echo $_POST['image'];}  elseif(isset($_POST['image']) && $valid) {echo "";} ?>">
+      <?php echo '<span style="color:red">' . $errImage . '</span>'; ?></td>
     </tr>
   <tr>
 	<td>

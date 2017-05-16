@@ -2,7 +2,7 @@
 define('DB_SERVER', 'localhost');
 define('DB_USER', 'notroot1');
 define('DB_PASSWORD', 'P@ssw0rd');
-define('DB_NAME', 'int322_162b04');
+define('DB_NAME', 'int420_151b14');
 
 class DB_Con
 {
